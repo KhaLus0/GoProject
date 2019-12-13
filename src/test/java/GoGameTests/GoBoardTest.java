@@ -157,4 +157,53 @@ public class GoBoardTest {
         assertEquals(game.getCurrentPlayer(), Player.WHITE);
     }
 
+    @Test
+    public void toStringTest() {
+        GoGame game = new GoGame();
+        game.board.getBoard()[1][1] = FieldState.WHITE;
+        game.board.getBoard()[1][2] = FieldState.WHITE;
+        game.board.getBoard()[1][7] = FieldState.WHITE;
+        game.board.getBoard()[1][8] = FieldState.WHITE;
+        game.board.getBoard()[2][3] = FieldState.WHITE;
+        game.board.getBoard()[2][4] = FieldState.WHITE;
+        game.board.getBoard()[2][5] = FieldState.WHITE;
+        game.board.getBoard()[3][2] = FieldState.WHITE;
+        game.board.getBoard()[3][9] = FieldState.WHITE;
+        game.board.getBoard()[6][2] = FieldState.WHITE;
+        game.board.getBoard()[6][5] = FieldState.WHITE;
+        game.board.getBoard()[8][5] = FieldState.WHITE;
+        game.board.getBoard()[1][3] = FieldState.BLACK;
+        game.board.getBoard()[1][5] = FieldState.BLACK;
+        game.board.getBoard()[2][2] = FieldState.BLACK;
+        game.board.getBoard()[2][6] = FieldState.BLACK;
+        game.board.getBoard()[3][4] = FieldState.BLACK;
+        game.board.getBoard()[3][6] = FieldState.BLACK;
+        game.board.getBoard()[4][2] = FieldState.BLACK;
+        game.board.getBoard()[4][5] = FieldState.BLACK;
+        game.board.getBoard()[5][8] = FieldState.BLACK;
+        game.board.getBoard()[8][3] = FieldState.BLACK;
+        game.board.getBoard()[8][7] = FieldState.BLACK;
+        assertEquals("wwbfbfwwffbwwwbffffwfbfbffwfbffbfffffffffffbffwffwfffffffffffffffbfwfbfffffffffff", game.board.toString());
+    }
+
+    @Test
+    public void KoRuleTest() {
+        GoGame game = new GoGame();
+        game.board.getBoard()[2][3] = FieldState.BLACK;
+        game.board.getBoard()[3][2] = FieldState.BLACK;
+        game.board.getBoard()[4][3] = FieldState.BLACK;
+        game.board.getBoard()[2][4] = FieldState.WHITE;
+        game.board.getBoard()[3][3] = FieldState.WHITE;
+        game.board.getBoard()[3][5] = FieldState.WHITE;
+        game.board.getBoard()[4][4] = FieldState.WHITE;
+        game.board.printBoard();
+        game.placeStone(3,4);
+        game.board.printBoard();
+        assertFalse(game.placeStone(3,3));
+        game.placeStone(9,9);
+        game.placeStone(9,8);
+        assertTrue(game.placeStone(3,3));
+        game.board.printBoard();
+    }
+
 }

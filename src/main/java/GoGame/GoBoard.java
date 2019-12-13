@@ -1,15 +1,14 @@
 package GoGame;
 
 import java.awt.*;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+
 
 public class GoBoard {
     private FieldState[][] board;
+    private Point KoPoint = new Point(0, 0);
+    private boolean isKo = false;
 
     public GoBoard(int size) {
         board = new FieldState[size+2][size+2];
@@ -55,8 +54,27 @@ public class GoBoard {
 
     public boolean isAvailable(int x, int y, Player player) {
         HashSet<Point> stones = getSetOfStonesToRemove(x, y, player);
+
+        if ((new Point(x, y)).equals(KoPoint) && stones.size() == 1)
+            return false;
+
         if (board[x][y].equals(FieldState.FREE) && (getNumOfLiberties(x, y) > 0 || !stones.isEmpty() || isPartOfAliveChain(x, y, player))) {
             removeChainOfStones(stones);
+
+            //after succesful move restart Ko rule
+            if (isKo) {
+                isKo = false;
+                KoPoint = new Point(0, 0);
+            }
+
+            //set KoPoint
+            if (stones.size() == 1) {
+                for (Point point: stones) {
+                    KoPoint = new Point((int)point.getX(), (int)point.getY());
+                    isKo = true;
+                }
+            }
+
            // System.out.println("Stone placed");
             return true;
         }
@@ -107,6 +125,7 @@ public class GoBoard {
         }
 
         board[x][y] = state;
+
         return stones;
     }
 
@@ -172,5 +191,20 @@ public class GoBoard {
             }
             System.out.println();
         }
+    }
+
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 1; i < 10; i++) {
+            for (int j = 1; j < 10; j++) {
+                if (board[i][j].equals(FieldState.FREE))
+                    result.append("f");
+                else if (board[i][j].equals(FieldState.WHITE))
+                    result.append("w");
+                else
+                    result.append("b");
+            }
+        }
+        return result.toString();
     }
 }
