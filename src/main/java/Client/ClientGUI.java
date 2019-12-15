@@ -103,7 +103,11 @@ public class ClientGUI
 				updateBoard(boardFields);
 				currentTurn = turn.OPPONENT;
 				stateLabel.setText(" Opponent turn!");
-				}	
+				}
+				if(response.equals("PICK"))
+				{
+					chooseAlive();
+				}
 			}		
 		}
 	}
@@ -387,7 +391,7 @@ public class ClientGUI
 	MouseListener mouseChooseAlive = new MouseListener()
 	{
 	public void mouseClicked(MouseEvent e) {
-		drawChooseOutline((e.getX()-15)/((getFrameWidth()-40)/boardSize),(e.getY())/((getFrameWidth()-40)/boardSize)-1,"Green");
+		drawChooseOutline((e.getX()-15)/((getFrameWidth()-40)/boardSize),(e.getY()-30)/((getFrameWidth()-40)/boardSize),"Green");
 		mainFrame.repaint();
 		mainFrame.revalidate();
 	}
