@@ -94,6 +94,12 @@ public class ClientGUI
 							index++;
 						}
 					}
+					for (int i = 0; i < boardSize; i++) {
+						for (int j  = 0; j < boardSize; j++) {
+							System.out.print(boardFields[i][j]);
+						}
+						System.out.println();
+					}
 				updateBoard(boardFields);
 				currentTurn = turn.OPPONENT;
 				stateLabel.setText(" Opponent turn!");
@@ -197,7 +203,7 @@ public class ClientGUI
 		{
 			for(int j=0;j<boardSize;j++)
 			{
-				if(boardFields[i][j]=="b")
+				if(boardFields[i][j].equals("b"))
 					{
 					PaintPawn paintPawn = new PaintPawn(15+j*((getFrameWidth()-40)/boardSize),i*((getFrameHeight()-40)/boardSize),30,30,"Black");
 					//pawns.set(i*boardSize+j, paintPawn);
@@ -206,7 +212,7 @@ public class ClientGUI
 					mainFrame.repaint();
 					mainFrame.revalidate();
 					}
-				else if(boardFields[i][j]=="w")
+				else if(boardFields[i][j].equals("w"))
 					{
 					PaintPawn paintPawn = new PaintPawn(15+j*((getFrameWidth()-40)/boardSize),i*((getFrameHeight()-40)/boardSize),30,30,"White");
 					pawns.add(paintPawn);
@@ -327,7 +333,7 @@ public class ClientGUI
 			if(currentTurn == turn.YOU)
 			{
 				System.out.println(((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1));
-				out.println("MOVE " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize)+1)+" "+(((e.getY())/((getFrameWidth()-40)/boardSize)-1)+1));
+				out.println("MOVE " +(((e.getY())/((getFrameWidth()-40)/boardSize)-1)+1) + " " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize)+1));
 			}
 			else
 			{
