@@ -130,21 +130,26 @@ public class ClientGUI
 					choosenOutlines.clear();
 					mainFrame.repaint();
 					mainFrame.revalidate();
+					System.out.println(response.length());
 					for(int i = 0;i<response.length();i++)
 					{
 						String tempColor="";
+						System.out.println(response.charAt(i));
 						if(response.charAt(i)=='g')
 						{
 							tempColor = "Green";
-							
+							System.out.println("GREEN");
 						}
-						if(response.charAt(i)=='r');
+						if(response.charAt(i)=='r')
 						{
 							tempColor="Red";
+							System.out.println("RED");
 						}
 						if(tempColor!="")
 						{
-							DrawChooseOutline drawOutline = new DrawChooseOutline(i/boardSize,i%boardSize,30,30,tempColor);
+							System.out.println("RYS");
+							DrawChooseOutline drawOutline = new DrawChooseOutline(15+i/boardSize*((getFrameWidth()-40)/boardSize),i%boardSize*((getFrameHeight()-40)/boardSize),30,30,tempColor);
+							System.out.println(i/boardSize + " " + i%boardSize);
 							allOutlines.add(drawOutline);
 							mainFrame.add(drawOutline);
 							mainFrame.repaint();
