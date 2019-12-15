@@ -51,8 +51,8 @@ class Game {
     }
 
     public void sendUpdatedBoard() {
-        currentPlayer.output.println("BOARD" + game.board.toString());
-        currentPlayer.opponent.output.println("BOARD" + game.board.toString());
+        currentPlayer.output.println("BOARD " + game.board.toString());
+        currentPlayer.opponent.output.println("BOARD " + game.board.toString());
     }
 
     public void pass(Player player) {
