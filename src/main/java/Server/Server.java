@@ -94,7 +94,7 @@ class Game {
                 builder.append("g");
             else
                 builder.append("n");
-            player.output.print("TERR " + builder.toString());
+            player.output.println("TERR " + builder.toString());
         }
         System.out.println(builder.toString());
         builder = new StringBuilder();
@@ -105,7 +105,7 @@ class Game {
                 builder.append("g");
             else
                 builder.append("n");
-            player.opponent.output.print("TERR " + builder.toString());
+            player.opponent.output.println("TERR " + builder.toString());
         }
         System.out.println(builder.toString());
     }
