@@ -70,7 +70,13 @@ public class ClientGUI
 		initButtons();
 		initFrames();
 		addMouse();
-		while(true)
+		listenServer();
+	}
+	
+	public void listenServer()
+	{
+		boolean check = true;
+		while(check)
 		{
 				String response = in.nextLine();
 				System.out.println(response);
