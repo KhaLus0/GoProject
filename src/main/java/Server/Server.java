@@ -43,10 +43,10 @@ class Game {
         } else if (player.opponent == null) {
             return;
         }
-        System.out.println("Teraz moj ruch!");
+        //System.out.println("Teraz moj ruch!");
         boolean validMove = game.placeStone(x, y);
         if (validMove) {
-            System.out.println("Pionek powinien zostac postawiony");
+            //System.out.println("Pionek powinien zostac postawiony");
             System.out.println(game.board.toString());
             passCounter = 0;
             sendUpdatedBoard();
@@ -55,7 +55,7 @@ class Game {
     }
 
     public void sendUpdatedBoard() {
-        System.out.println("BOARD " + game.board.toString());
+       // System.out.println("BOARD " + game.board.toString());
         currentPlayer.output.println("BOARD " + game.board.toString());
         currentPlayer.opponent.output.println("BOARD " + game.board.toString());
     }
@@ -123,9 +123,9 @@ class Game {
                 if (input.hasNextLine()) {
                     String command = input.nextLine();
                     if (command.startsWith("MOVE")) {
-                        System.out.println(command);
+                       // System.out.println(command);
                         String[] temp = command.split(" ");
-                        System.out.println(temp[1] + " " + temp[2]);
+                        //System.out.println(temp[1] + " " + temp[2]);
                         move(Integer.parseInt(temp[1]), Integer.parseInt(temp[2]), this);
                     } else if (command.startsWith("PASS")) {
                         pass(this);
