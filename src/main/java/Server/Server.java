@@ -44,7 +44,7 @@ class Game {
         }
         boolean validMove = game.placeStone(x, y);
         if (validMove) {
-            System.out.println(game.board.toString());
+            //System.out.println(game.board.toString());
             passCounter = 0;
             sendUpdatedBoard();
             currentPlayer = currentPlayer.opponent;
@@ -96,6 +96,7 @@ class Game {
                 builder.append("n");
             player.output.print("TERR " + builder.toString());
         }
+        System.out.println(builder.toString());
         builder = new StringBuilder();
         for (int i = 0; i < opponentTerritory.length(); i++) {
             if (currentTerritory.charAt(i) == 'g' && opponentTerritory.charAt(i) == 'n')
@@ -106,6 +107,7 @@ class Game {
                 builder.append("n");
             player.opponent.output.print("TERR " + builder.toString());
         }
+        System.out.println(builder.toString());
     }
 
     public void findWinner() {
