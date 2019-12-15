@@ -31,6 +31,10 @@ public class ClientGUI
 	static JButton passTurn = new JButton("Pass turn");
 	static JButton surrender = new JButton("Surrender");
 	static JLabel stateLabel = new JLabel(" Your turn!");
+	static JButton send = new JButton("Send");
+	static JButton reset = new JButton("Reset");
+	static JButton accept = new JButton("Agree");
+	static JButton decline = new JButton("Refuse");
 
 	static int boardSize;
 	static gamemodeType currentGamemodeType;
@@ -108,14 +112,47 @@ public class ClientGUI
 				{
 					chooseAlive();
 				}
+				if(response.equals("TERR"))
+				{
+					mainFrame.add(accept);
+					mainFrame.add(decline);
+					response = response.substring(5);
+					for(int i=0;i<choosenOutlines.size();i++)
+					{
+						if(choosenOutlines.get(i)!=null)
+						mainFrame.remove(choosenOutlines.get(i));
+					}
+					choosenOutlines.clear();
+					mainFrame.repaint();
+					mainFrame.revalidate();
+					for(int i = 0;i<response.length();i++)
+					{
+						String tempColor="";
+						if(response.charAt(i)=='g')
+						{
+							tempColor = "Green";
+						}
+						if(response.charAt(i)=='r')
+						{
+							tempColor="Red";
+						}
+						if(tempColor!="")
+						{
+							DrawChooseOutline drawOutline = new DrawChooseOutline(i/boardSize,i%boardSize,30,30,tempColor);
+							allOutlines.add(drawOutline);
+							mainFrame.add(drawOutline);
+							mainFrame.repaint();
+							mainFrame.revalidate();
+						}
+					}
+					mainFrame.repaint();
+					mainFrame.revalidate();
+				}
 			}		
 		}
 	}
 	
-	public void stateSetter()
-	{
-		
-	}
+	static ArrayList<DrawChooseOutline> allOutlines = new ArrayList<DrawChooseOutline>();
 	
 	public void clearBoard()
 	{
@@ -199,18 +236,21 @@ public class ClientGUI
 	}
 
 	static ArrayList<PaintPawn> pawns = new ArrayList<PaintPawn>();
+	static ArrayList<String> pawnsString = new ArrayList<String>();
 
 	public void paintPawns(String[][] boardFields)
 	{
 		pawns.clear();
+		pawnsString.clear();
 		for(int i=0;i<boardSize;i++)
 		{
 			for(int j=0;j<boardSize;j++)
 			{
+				pawnsString.add(boardFields[i][j]);
 				if(boardFields[i][j].equals("b"))
 					{
 					PaintPawn paintPawn = new PaintPawn(15+j*((getFrameWidth()-40)/boardSize),i*((getFrameHeight()-40)/boardSize),30,30,"Black");
-					//pawns.set(i*boardSize+j, paintPawn);
+
 					pawns.add(paintPawn);
 					mainFrame.add(paintPawn);
 					mainFrame.repaint();
@@ -288,8 +328,56 @@ public class ClientGUI
 			
 		};
 		
-		
+		ActionListener doSend = new ActionListener()
+		{
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(field);
+				out.println("SEND "+field);
+			}
+			
+		};
+		
+		ActionListener doReset = new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(int i=0;i<choosenOutlines.size();i++)
+				{
+					if(choosenOutlines.get(i)!=null)
+					mainFrame.remove(choosenOutlines.get(i));
+				}
+				choosenOutlines.clear();
+				mainFrame.repaint();
+				mainFrame.revalidate();
+			}
+			
+		};
+		
+		ActionListener agree = new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				out.println("AGREE");
+			}
+		};
+		
+		ActionListener refuse = new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				out.println("REFUSE");
+			}
+		};
+		
+		reset.addActionListener(doReset);
+		send.addActionListener(doSend);
+		accept.addActionListener(agree);
+		decline.addActionListener(refuse);
 		setGamemodeTypePvP.addActionListener(setGamemodeType);
 		setGamemodeTypePvB.addActionListener(setGamemodeType);
 		surrender.addActionListener(doSurrender);
@@ -375,23 +463,50 @@ public class ClientGUI
 		DrawChooseOutline drawOutline = new DrawChooseOutline(15+x*((getFrameWidth()-40)/boardSize),y*((getFrameHeight()-40)/boardSize),30,30,ccolor);
 		mainFrame.add(drawOutline);
 		choosenOutlines.add(drawOutline);
-		Point point = new Point(x,y);
+		Point point = new Point(x+1,y+1);
 		choosenPoint.add(point);
 	}
 		
+	String field="";
 	
 	public void chooseAlive()
 	{
 		clearNodes();
+		for(int i=0;i<(boardSize*boardSize);i++)
+		{
+			field=field+"n";
+		}
+		mainFrameMenuBar.add(send);
+		mainFrameMenuBar.add(reset);
 		mainFrame.removeMouseListener(mouseClick);
 		mainFrame.removeMouseMotionListener(mouseMove);
 		mainFrame.addMouseListener(mouseChooseAlive);
+		mainFrame.repaint();
+		mainFrame.revalidate();
 	}
+	
+	
 	
 	MouseListener mouseChooseAlive = new MouseListener()
 	{
 	public void mouseClicked(MouseEvent e) {
+		clearBoard();
 		drawChooseOutline((e.getX()-15)/((getFrameWidth()-40)/boardSize),(e.getY()-30)/((getFrameWidth()-40)/boardSize),"Green");
+		int min=(e.getX()-15)/((getFrameWidth()-40)/boardSize)+(e.getY()-30)/((getFrameWidth()-40)/boardSize)*boardSize;
+		String temp = field.substring(0,min);
+		field = temp+"g"+field.substring(min+1);
+		String[][] boardFields = new String[boardSize][boardSize];
+		System.out.println("BOOP");
+		for(int i = 0;i<pawns.size();i++)
+		{
+			boardFields[i/boardSize][i%boardSize] = pawnsString.get(i);
+		}
+		mainFrame.repaint();
+		mainFrame.revalidate();
+		paintPawns(boardFields);
+		mainFrame.repaint();
+		mainFrame.revalidate();	
+		drawRectangles();
 		mainFrame.repaint();
 		mainFrame.revalidate();
 	}
