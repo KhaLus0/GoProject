@@ -2,11 +2,16 @@ package Client;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.*;
 
 import java.lang.String;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class ClientGUI
@@ -26,11 +31,22 @@ public class ClientGUI
 	static JMenu mainFrameMenu = new JMenu();
 	static JButton passTurn = new JButton("Pass turn");
 	static JButton surrender = new JButton("Surrender");
+	static JLabel stateLabel = new JLabel(" Your turn!");
 
 	static int boardSize;
 	static gamemodeType currentGamemodeType;
+	static turn currentTurn;
 	static final int frameHeight = 820;
 	static final int frameWidth = 820;
+	
+	Socket socket;
+	Scanner in;
+	PrintWriter out;
+	
+	public enum turn
+	{
+		YOU, OPPONENT;
+	}
 
 	public int getFrameHeight()
 	{
@@ -47,10 +63,14 @@ public class ClientGUI
 		PVP , PVB;
 	}
 
-	public ClientGUI()
+	public ClientGUI() throws UnknownHostException, IOException
 	{
+		socket = new Socket("localhost",58901);
+		in = new Scanner(socket.getInputStream());
+        out = new PrintWriter(socket.getOutputStream(), true);
 		initButtons();
 		initFrames();
+		addMouse();
 	}
 	
 	public void clearBoard()
@@ -64,13 +84,6 @@ public class ClientGUI
 		{
 			mainFrame.remove(rect.get(i));
 		}
-		for(int i=0;i<nodes.size();i++)
-		{
-			if(nodes.get(i)!=null)
-			mainFrame.remove(nodes.get(i));
-		}
-		mainFrame.repaint();
-		mainFrame.revalidate();
 	}
 
 	public void updateBoard(String[][] boardFields)
@@ -82,34 +95,41 @@ public class ClientGUI
 		drawRectangles();
 		mainFrame.repaint();
 		mainFrame.revalidate();
-		drawNodes();
-		mainFrame.repaint();
-		mainFrame.revalidate();
 	}
 	
 	static ArrayList<DrawNode> nodes = new ArrayList<DrawNode>();
 	
-	
-	
-	public void drawNodes()
+	public void clearNodes()
 	{
-		nodes.clear();
-		for(int i=0;i<boardSize;i++)
+		for(int i=0;i<nodes.size();i++)
 		{
-			for(int j=0;j<boardSize;j++)
-			{
-				if(pawns.get(i*boardSize+j)==null)
-				{
-					DrawNode node = new DrawNode(28+j*((getFrameWidth()-40)/boardSize),13+i*((getFrameHeight()-40)/boardSize),4,4,i,j);
-					nodes.add(node);
-					mainFrame.add(node);
-					mainFrame.repaint();
-					mainFrame.revalidate();
-				}
-				else
-					nodes.add(null);
-			}
+			if(nodes.get(i)!=null)
+			mainFrame.remove(nodes.get(i));
 		}
+	}
+	
+	public void drawNodes(int x1,int y1)
+	{
+		clearNodes();
+		nodes.clear();
+		if(x1>=0);
+		{
+			if(y1>=0)
+			{
+				if(x1<(boardSize))
+				{
+					if(y1<boardSize)
+					{
+						DrawNode node = new DrawNode(15+x1*((getFrameWidth()-40)/boardSize),y1*((getFrameHeight()-40)/boardSize),30,30);
+						nodes.add(node);
+						mainFrame.add(node);
+						mainFrame.repaint();
+						mainFrame.revalidate();
+					}
+					
+				}
+			}	
+		}	
 	}
 
 	static ArrayList<DrawRectangle> rect = new ArrayList<DrawRectangle>();
@@ -230,7 +250,7 @@ public class ClientGUI
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				statUpdateBoard();
+				chooseAlive();
 			}
 		};
 		passTurn.addActionListener(testing);
@@ -246,6 +266,7 @@ public class ClientGUI
 					currentGamemodeType = gamemodeType.PVP;
 				if(name==("Player vs Bot"))
 					currentGamemodeType = gamemodeType.PVB;
+				currentTurn = turn.YOU;
 				statUpdateBoard();
 			}
 		};
@@ -279,6 +300,7 @@ public class ClientGUI
 		mainFrame.setSize(frameWidth, frameHeight );
 		mainFrameMenuBar.add(passTurn);
 		mainFrameMenuBar.add(surrender);
+		mainFrameMenuBar.add(stateLabel);
 		mainFrame.setJMenuBar(mainFrameMenuBar);
 		mainFrame.setLocation(380,0);
 		mainFrame.setResizable(false);
@@ -288,5 +310,75 @@ public class ClientGUI
 		mainFrame.setVisible(true);
 		chooseSize.setVisible(true);
 	}
-
+	
+	MouseListener mouseClick = new MouseListener() {
+		public void mouseClicked(MouseEvent e) {
+			if(currentTurn == turn.YOU)
+			{
+				System.out.println(((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1));
+				out.println("MOVE " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1));
+				currentTurn = turn.OPPONENT;
+				stateLabel.setText(" Opponent turn!");
+			}
+			else
+			{
+				currentTurn = turn.YOU;
+				stateLabel.setText(" Your Turn!");
+			}
+		}
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+	};
+	
+	MouseMotionListener mouseMove = new MouseMotionListener()
+	{
+		public void mouseDragged(MouseEvent e) {}
+		public void mouseMoved(MouseEvent e) {
+			drawNodes((e.getX()-15)/((getFrameWidth()-40)/boardSize),(e.getY())/((getFrameWidth()-40)/boardSize)-1);
+			mainFrame.revalidate();
+			mainFrame.repaint();
+		}
+	};
+	
+	public void addMouse()
+	{
+				mainFrame.addMouseListener(mouseClick);
+				mainFrame.addMouseMotionListener(mouseMove);
+	}
+	
+	ArrayList<Point> choosenPoint = new ArrayList<Point>();
+	ArrayList<DrawChooseOutline> choosenOutlines = new ArrayList<DrawChooseOutline>();
+	
+	public void drawChooseOutline(int x,int y,String ccolor)
+	{
+		DrawChooseOutline drawOutline = new DrawChooseOutline(15+x*((getFrameWidth()-40)/boardSize),y*((getFrameHeight()-40)/boardSize),30,30,ccolor);
+		mainFrame.add(drawOutline);
+		choosenOutlines.add(drawOutline);
+		Point point = new Point(x,y);
+		choosenPoint.add(point);
+	}
+		
+	
+	public void chooseAlive()
+	{
+		clearNodes();
+		mainFrame.removeMouseListener(mouseClick);
+		mainFrame.removeMouseMotionListener(mouseMove);
+		mainFrame.addMouseListener(mouseChooseAlive);
+	}
+	
+	MouseListener mouseChooseAlive = new MouseListener()
+	{
+	public void mouseClicked(MouseEvent e) {
+		drawChooseOutline((e.getX()-15)/((getFrameWidth()-40)/boardSize),(e.getY())/((getFrameWidth()-40)/boardSize)-1,"Green");
+		mainFrame.repaint();
+		mainFrame.revalidate();
+	}
+	public void mousePressed(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	};
 }
