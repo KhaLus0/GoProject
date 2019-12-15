@@ -332,8 +332,8 @@ public class ClientGUI
 		public void mouseClicked(MouseEvent e) {
 			if(currentTurn == turn.YOU)
 			{
-				System.out.println(((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1));
-				out.println("MOVE " +(((e.getY())/((getFrameWidth()-40)/boardSize)-1)+1) + " " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize)+1));
+				System.out.println(((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY()-15)/((getFrameWidth()-40)/boardSize)-1));
+				out.println("MOVE " +(((e.getY()-35)/((getFrameWidth()-40)/boardSize))+1) + " " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize)+1));
 			}
 			else
 			{
