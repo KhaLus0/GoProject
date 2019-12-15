@@ -351,7 +351,7 @@ public class ClientGUI
 	{
 		public void mouseDragged(MouseEvent e) {}
 		public void mouseMoved(MouseEvent e) {
-			drawNodes((e.getX()-15)/((getFrameWidth()-40)/boardSize),(e.getY())/((getFrameWidth()-40)/boardSize)-1);
+			drawNodes((e.getX()-15)/((getFrameWidth()-40)/boardSize),(e.getY()-35)/((getFrameWidth()-40)/boardSize));
 			mainFrame.revalidate();
 			mainFrame.repaint();
 		}
