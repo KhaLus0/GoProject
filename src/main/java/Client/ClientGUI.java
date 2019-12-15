@@ -35,6 +35,8 @@ public class ClientGUI
 	static JButton reset = new JButton("Reset");
 	static JButton accept = new JButton("Agree");
 	static JButton decline = new JButton("Refuse");
+	static JDialog matchResult = new JDialog(mainFrame,"Match result");
+	static JLabel resultLabel = new JLabel();
 
 	static int boardSize;
 	static gamemodeType currentGamemodeType;
@@ -112,12 +114,13 @@ public class ClientGUI
 				{
 					chooseAlive();
 				}
-				if(response.equals("TERR"))
+				if(response.startsWith("TERR"))
 				{
 					mainFrameMenuBar.add(accept);
 					mainFrameMenuBar.add(decline);
+					mainFrame.repaint();
+					mainFrame.revalidate();
 					clearBoard();
-
 					response = response.substring(5);
 					for(int i=0;i<choosenOutlines.size();i++)
 					{
@@ -130,11 +133,11 @@ public class ClientGUI
 					for(int i = 0;i<response.length();i++)
 					{
 						String tempColor="";
-						if(response.charAt(i)=='g')
+						if(response.equals("g"))
 						{
 							tempColor = "Green";
 						}
-						if(response.charAt(i)=='r')
+						if(response.equals("r"));
 						{
 							tempColor="Red";
 						}
@@ -163,6 +166,19 @@ public class ClientGUI
 					mainFrame.repaint();
 					mainFrame.revalidate();
 				}
+				if(response.equals("WIN"))
+				{
+					resultLabel.setText("You Win!");
+				}
+				if(response.equals("LOSE"))
+				{
+					resultLabel.setText("You Lose!");
+				}
+				if(response.equals("TIE"))
+				{
+					resultLabel.setText("It's a Draw!");
+				}
+				
 			}		
 		}
 	}
@@ -367,6 +383,11 @@ public class ClientGUI
 				choosenOutlines.clear();
 				mainFrame.repaint();
 				mainFrame.revalidate();
+				field="";
+				for(int i=0;i<(boardSize*boardSize);i++)
+				{
+					field=field+"n";
+				}
 			}
 			
 		};
