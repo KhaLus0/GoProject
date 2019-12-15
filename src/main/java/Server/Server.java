@@ -114,7 +114,7 @@ class Game {
         }
 
         private void processCommands() {
-            while (input.hasNextLine()) {
+            while (true) {
                 String command = input.nextLine();
                 if (command.startsWith("MOVE")) {
                     String[] temp = command.split(" ");
