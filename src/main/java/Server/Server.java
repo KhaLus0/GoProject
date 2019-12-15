@@ -42,10 +42,8 @@ class Game {
         } else if (player.opponent == null) {
             return;
         }
-        //System.out.println("Teraz moj ruch!");
         boolean validMove = game.placeStone(x, y);
         if (validMove) {
-            //System.out.println("Pionek powinien zostac postawiony");
             System.out.println(game.board.toString());
             passCounter = 0;
             sendUpdatedBoard();
@@ -54,7 +52,6 @@ class Game {
     }
 
     public void sendUpdatedBoard() {
-       // System.out.println("BOARD " + game.board.toString());
         currentPlayer.output.println("BOARD " + game.board.toString());
         currentPlayer.opponent.output.println("BOARD " + game.board.toString());
     }
@@ -115,7 +112,7 @@ class Game {
         Point curr = game.board.getTerritoryAndCaptives(currentPlayer.stone, currentPlayer.territory);
         Point opp = game.board.getTerritoryAndCaptives(currentPlayer.opponent.stone, currentPlayer.opponent.territory);
         int currPoints = (int)curr.getX() - (int)opp.getY();
-        int oppPoints = (int)opp.getY() - (int)curr.getX();
+        int oppPoints = (int)opp.getX() - (int)curr.getY();
 
         if (currPoints > oppPoints) {
             currentPlayer.output.println("WIN");
