@@ -118,7 +118,9 @@ class Game {
                 if (input.hasNextLine()) {
                     String command = input.nextLine();
                     if (command.startsWith("MOVE")) {
+                        System.out.println(command);
                         String[] temp = command.split(" ");
+                        System.out.println(temp[1] + " " + temp[2]);
                         move(Integer.parseInt(temp[1]), Integer.parseInt(temp[2]), this);
                     } else if (command.startsWith("PASS")) {
                         pass(this);
