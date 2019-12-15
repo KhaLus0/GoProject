@@ -120,7 +120,7 @@ class Game {
                     if (command.startsWith("MOVE")) {
                         String[] temp = command.split(" ");
                         move(Integer.parseInt(temp[1]), Integer.parseInt(temp[2]), this);
-                    } else if (command.startsWith("PASS" )) {
+                    } else if (command.startsWith("PASS")) {
                         pass(this);
                     } else if (command.startsWith("RESIGN")) {
                         resign(this);
