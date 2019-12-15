@@ -90,7 +90,7 @@ public class ClientGUI
 					{
 						for(int j=0;j<boardSize;j++)
 						{
-							boardFields[i][j]=response.substring(index,index);
+							boardFields[i][j]=response.substring(index,index+1);
 							index++;
 						}
 					}
