@@ -94,8 +94,8 @@ class Game {
                 builder.append("g");
             else
                 builder.append("n");
-            player.output.println("TERR " + builder.toString());
         }
+        player.output.println("TERR " + builder.toString());
         System.out.println(builder.toString());
         builder = new StringBuilder();
         for (int i = 0; i < opponentTerritory.length(); i++) {
@@ -105,8 +105,8 @@ class Game {
                 builder.append("g");
             else
                 builder.append("n");
-            player.opponent.output.println("TERR " + builder.toString());
         }
+        player.opponent.output.println("TERR " + builder.toString());
         System.out.println(builder.toString());
     }
 
