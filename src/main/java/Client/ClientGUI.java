@@ -114,8 +114,10 @@ public class ClientGUI
 				}
 				if(response.equals("TERR"))
 				{
-					mainFrame.add(accept);
-					mainFrame.add(decline);
+					mainFrameMenuBar.add(accept);
+					mainFrameMenuBar.add(decline);
+					clearBoard();
+
 					response = response.substring(5);
 					for(int i=0;i<choosenOutlines.size();i++)
 					{
@@ -145,6 +147,19 @@ public class ClientGUI
 							mainFrame.revalidate();
 						}
 					}
+					mainFrame.repaint();
+					mainFrame.revalidate();
+					String[][] boardFields = new String[boardSize][boardSize];
+					for(int i = 0;i<pawns.size();i++)
+					{
+						boardFields[i/boardSize][i%boardSize] = pawnsString.get(i);
+					}
+					mainFrame.repaint();
+					mainFrame.revalidate();
+					paintPawns(boardFields);
+					mainFrame.repaint();
+					mainFrame.revalidate();	
+					drawRectangles();
 					mainFrame.repaint();
 					mainFrame.revalidate();
 				}
