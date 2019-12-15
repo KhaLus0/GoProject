@@ -258,10 +258,32 @@ public class ClientGUI
 			}
 		};
 		
+		ActionListener doSurrender = new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					out.println("SURRENDER");
+			}
+			
+		};
+		
+		ActionListener doPass = new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					out.println("PASS");
+			}
+			
+		};
+		
 		
 
 		setGamemodeTypePvP.addActionListener(setGamemodeType);
 		setGamemodeTypePvB.addActionListener(setGamemodeType);
+		surrender.addActionListener(doSurrender);
+		passTurn.addActionListener(doPass);
 		passTurn.setPreferredSize( new Dimension(10,20));
 		surrender.setPreferredSize( new Dimension(10,20));
 	}
@@ -305,7 +327,7 @@ public class ClientGUI
 			if(currentTurn == turn.YOU)
 			{
 				System.out.println(((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1));
-				out.println("MOVE " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1));
+				out.println("MOVE " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize)+1)+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1)+1);
 			}
 			else
 			{
