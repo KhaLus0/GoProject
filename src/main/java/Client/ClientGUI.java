@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class ClientGUI
 {
@@ -71,6 +70,33 @@ public class ClientGUI
 		initButtons();
 		initFrames();
 		addMouse();
+		while(true)
+		{
+				String response = in.nextLine();
+				System.out.println(response);
+				if(response.startsWith("BOARD"))
+				{
+					response.substring(6);
+					String[][] boardFields = new String[boardSize][boardSize];
+					int index=0;
+					for(int i=0;i<boardSize;i++)
+					{
+						for(int j=0;j<boardSize;j++)
+						{
+							boardFields[i][j]=response.substring(index,index);
+							index++;
+						}
+					}
+				updateBoard(boardFields);
+				currentTurn = turn.OPPONENT;
+				stateLabel.setText(" Opponent turn!");
+				}		
+		}
+	}
+	
+	public void stateSetter()
+	{
+		
 	}
 	
 	public void clearBoard()
@@ -85,6 +111,8 @@ public class ClientGUI
 			mainFrame.remove(rect.get(i));
 		}
 	}
+	
+	
 
 	public void updateBoard(String[][] boardFields)
 	{
@@ -151,42 +179,6 @@ public class ClientGUI
 		mainFrame.revalidate();
 		
 	}
-	
-	public void statUpdateBoard()
-	{
-		String[][] boardFields = new String[boardSize][boardSize];
-		for(int i =0;i<boardSize;i++)
-		{
-			for(int j=0;j<boardSize;j++)
-			{
-				if(i==3&&j==3)
-					boardFields[i][j]="B";
-				else if(i==4&&j==4)
-					boardFields[i][j]="W";
-					else
-					boardFields[i][j]="";
-			}
-		}
-		updateBoard(boardFields);
-	}
-	
-	public void statUpdateBoardTest()
-	{
-		String[][] boardFields = new String[boardSize][boardSize];
-		for(int i =0;i<boardSize;i++)
-		{
-			for(int j=0;j<boardSize;j++)
-			{
-				if(i==6&&j==7)
-					boardFields[i][j]="B";
-				else if(i==2&&j==1)
-					boardFields[i][j]="W";
-					else
-					boardFields[i][j]="";
-			}
-		}
-		updateBoard(boardFields);
-	}
 
 	static ArrayList<PaintPawn> pawns = new ArrayList<PaintPawn>();
 
@@ -197,7 +189,7 @@ public class ClientGUI
 		{
 			for(int j=0;j<boardSize;j++)
 			{
-				if(boardFields[i][j]=="B")
+				if(boardFields[i][j]=="b")
 					{
 					PaintPawn paintPawn = new PaintPawn(15+j*((getFrameWidth()-40)/boardSize),i*((getFrameHeight()-40)/boardSize),30,30,"Black");
 					//pawns.set(i*boardSize+j, paintPawn);
@@ -206,7 +198,7 @@ public class ClientGUI
 					mainFrame.repaint();
 					mainFrame.revalidate();
 					}
-				else if(boardFields[i][j]=="W")
+				else if(boardFields[i][j]=="w")
 					{
 					PaintPawn paintPawn = new PaintPawn(15+j*((getFrameWidth()-40)/boardSize),i*((getFrameHeight()-40)/boardSize),30,30,"White");
 					pawns.add(paintPawn);
@@ -231,6 +223,7 @@ public class ClientGUI
 					{
 						chooseSize.setVisible(false);
 						String name = ((JButton) e.getSource()).getText().substring(0,2).replaceAll("\\s","");
+						out.println("SIZE "+name);
 						boardSize = Integer.parseInt(name);
 						chooseGamemodeType.setVisible(true);
 					}
@@ -238,23 +231,6 @@ public class ClientGUI
 		setSize9.addActionListener(setSize);
 		setSize13.addActionListener(setSize);
 		setSize19.addActionListener(setSize);
-		
-		ActionListener testing = new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				statUpdateBoardTest();
-			}
-		};
-		ActionListener testing2 = new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				chooseAlive();
-			}
-		};
-		passTurn.addActionListener(testing);
-		surrender.addActionListener(testing2);
 
 		ActionListener setGamemodeType = new ActionListener()
 		{
@@ -267,9 +243,13 @@ public class ClientGUI
 				if(name==("Player vs Bot"))
 					currentGamemodeType = gamemodeType.PVB;
 				currentTurn = turn.YOU;
-				statUpdateBoard();
+				drawRectangles();
+				mainFrame.repaint();
+				mainFrame.revalidate();
 			}
 		};
+		
+		
 
 		setGamemodeTypePvP.addActionListener(setGamemodeType);
 		setGamemodeTypePvB.addActionListener(setGamemodeType);
@@ -317,8 +297,6 @@ public class ClientGUI
 			{
 				System.out.println(((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1));
 				out.println("MOVE " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1));
-				currentTurn = turn.OPPONENT;
-				stateLabel.setText(" Opponent turn!");
 			}
 			else
 			{
