@@ -67,6 +67,11 @@ class Game {
             return;
         }
         passCounter++;
+        if (passCounter == 2){
+            currentPlayer.output.println("PICK");
+            currentPlayer.opponent.output.println("PICK");
+            passCounter = 0;
+        }
         currentPlayer = currentPlayer.opponent;
     }
 
