@@ -69,7 +69,6 @@ public class ClientGUI
         out = new PrintWriter(socket.getOutputStream(), true);
 		initButtons();
 		initFrames();
-		addMouse();
 		listenServer();
 	}
 	
@@ -78,6 +77,8 @@ public class ClientGUI
 		boolean check = true;
 		while(check)
 		{
+			if(in.hasNextLine())
+			{
 				String response = in.nextLine();
 				System.out.println(response);
 				if(response.startsWith("BOARD"))
@@ -96,7 +97,8 @@ public class ClientGUI
 				updateBoard(boardFields);
 				currentTurn = turn.OPPONENT;
 				stateLabel.setText(" Opponent turn!");
-				}		
+				}	
+			}		
 		}
 	}
 	
@@ -252,6 +254,7 @@ public class ClientGUI
 				drawRectangles();
 				mainFrame.repaint();
 				mainFrame.revalidate();
+				addMouse();
 			}
 		};
 		
