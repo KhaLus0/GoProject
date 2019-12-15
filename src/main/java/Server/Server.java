@@ -2,13 +2,12 @@ package Server;
 
 import GoGame.GoGame;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.util.Scanner;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -85,10 +84,57 @@ class Game {
         currentPlayer.opponent.output.println("WIN");
     }
 
+    public void sendOpponentTerritory(Player player) {
+        String currentTerritory, opponentTerritory;
+        currentTerritory = player.territory;
+        opponentTerritory = player.opponent.territory;
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < currentTerritory.length(); i++) {
+            if (currentTerritory.charAt(i) == 'n' && opponentTerritory.charAt(i) == 'g')
+                builder.append("r");
+            else if (currentTerritory.charAt(i) == 'g' && opponentTerritory.charAt(i) == 'n')
+                builder.append("g");
+            else
+                builder.append("n");
+            player.output.print("TERR " + builder.toString());
+        }
+        builder = new StringBuilder();
+        for (int i = 0; i < opponentTerritory.length(); i++) {
+            if (currentTerritory.charAt(i) == 'g' && opponentTerritory.charAt(i) == 'n')
+                builder.append("r");
+            else if (currentTerritory.charAt(i) == 'n' && opponentTerritory.charAt(i) == 'g')
+                builder.append("g");
+            else
+                builder.append("n");
+            player.opponent.output.print("TERR " + builder.toString());
+        }
+    }
+
+    public void findWinner() {
+        Point curr = game.board.getTerritoryAndCaptives(currentPlayer.stone, currentPlayer.territory);
+        Point opp = game.board.getTerritoryAndCaptives(currentPlayer.opponent.stone, currentPlayer.opponent.territory);
+        int currPoints = (int)curr.getX() - (int)opp.getY();
+        int oppPoints = (int)opp.getY() - (int)curr.getX();
+
+        if (currPoints > oppPoints) {
+            currentPlayer.output.println("WIN");
+            currentPlayer.opponent.output.println("LOSE");
+        } else if (currPoints < oppPoints) {
+            currentPlayer.output.println("LOSE");
+            currentPlayer.opponent.output.println("WIN");
+        } else {
+            currentPlayer.output.println("TIE");
+            currentPlayer.opponent.output.println("TIE");
+        }
+    }
 
     class Player implements Runnable{
 
         char stone;
+        boolean choice = false;
+        boolean agreed = false;
+        String territory;
         Player opponent;
         Socket socket;
         Scanner input;
@@ -97,6 +143,7 @@ class Game {
         public Player(Socket socket, char stone) {
             this.socket = socket;
             this.stone = stone;
+            territory = "";
         }
 
         public void run() {
@@ -136,6 +183,28 @@ class Game {
                         pass(this);
                     } else if (command.startsWith("RESIGN")) {
                         resign(this);
+                    } else if (command.startsWith("SEND")) {
+                        String[] temp = command.split(" ");
+                        this.territory = temp[1];
+                        if (!this.opponent.territory.equals("")) {
+                            sendOpponentTerritory(this);
+                        }
+                    } else if (command.startsWith("AGREE") || command.startsWith("REFUSE")) {
+                        this.choice = true;
+                        if (command.equals("AGREE"))
+                            this.agreed = true;
+                        if (this.opponent.choice) {
+                            if (this.agreed && this.opponent.agreed)
+                                findWinner();
+                            else {
+                                this.choice = false;
+                                this.opponent.choice = false;
+                                this.agreed = false;
+                                this.opponent.agreed = false;
+                                this.output.println("REPLAY");
+                                this.opponent.output.println("REPLAY");
+                            }
+                        }
                     }
                 }
             }

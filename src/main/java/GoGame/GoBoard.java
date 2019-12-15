@@ -207,4 +207,23 @@ public class GoBoard {
         }
         return result.toString();
     }
+
+    public Point getTerritoryAndCaptives(char stone, String territory) {
+        int territoryPoints = 0;
+        int captives = 0;
+        FieldState opp = stone == 'B' ? FieldState.WHITE : FieldState.BLACK;
+        for (int i = 0; i < territory.length(); i++) {
+            if (territory.charAt(i) == 'g') {
+                int x = (i / 9) + 1;
+                int y = (i % 9) + 1;
+                if (board[x][y].equals(FieldState.FREE))
+                    territoryPoints++;
+                else if (board[x][y].equals(opp)) {
+                    territoryPoints++;
+                    captives++;
+                }
+            }
+        }
+        return new Point(territoryPoints, captives);
+    }
 }
