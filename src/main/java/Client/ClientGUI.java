@@ -83,7 +83,7 @@ public class ClientGUI
 				System.out.println(response);
 				if(response.startsWith("BOARD"))
 				{
-					response.substring(6);
+					response=response.substring(6);
 					String[][] boardFields = new String[boardSize][boardSize];
 					int index=0;
 					for(int i=0;i<boardSize;i++)
