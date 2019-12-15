@@ -133,11 +133,12 @@ public class ClientGUI
 					for(int i = 0;i<response.length();i++)
 					{
 						String tempColor="";
-						if(response.equals("g"))
+						if(response.charAt(i)=='g')
 						{
 							tempColor = "Green";
+							
 						}
-						if(response.equals("r"));
+						if(response.charAt(i)=='r');
 						{
 							tempColor="Red";
 						}
@@ -169,14 +170,17 @@ public class ClientGUI
 				if(response.equals("WIN"))
 				{
 					resultLabel.setText("You Win!");
+					resultLabel.setVisible(true);
 				}
 				if(response.equals("LOSE"))
 				{
 					resultLabel.setText("You Lose!");
+					resultLabel.setVisible(true);
 				}
 				if(response.equals("TIE"))
 				{
 					resultLabel.setText("It's a Draw!");
+					resultLabel.setVisible(true);
 				}
 				
 			}		
@@ -344,7 +348,7 @@ public class ClientGUI
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					out.println("SURRENDER");
+					out.println("RESIGN");
 			}
 			
 		};
