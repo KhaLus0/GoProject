@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -42,8 +43,11 @@ class Game {
         } else if (player.opponent == null) {
             return;
         }
+        System.out.println("Teraz moj ruch!");
         boolean validMove = game.placeStone(x, y);
         if (validMove) {
+            System.out.println("Pionek powinien zostac postawiony");
+            System.out.println(game.board.toString());
             passCounter = 0;
             sendUpdatedBoard();
             currentPlayer = currentPlayer.opponent;
@@ -51,6 +55,7 @@ class Game {
     }
 
     public void sendUpdatedBoard() {
+        System.out.println("BOARD " + game.board.toString());
         currentPlayer.output.println("BOARD " + game.board.toString());
         currentPlayer.opponent.output.println("BOARD " + game.board.toString());
     }
