@@ -327,7 +327,7 @@ public class ClientGUI
 			if(currentTurn == turn.YOU)
 			{
 				System.out.println(((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1));
-				out.println("MOVE " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize)+1)+" "+((e.getY())/((getFrameWidth()-40)/boardSize)-1)+1);
+				out.println("MOVE " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize)+1)+" "+(((e.getY())/((getFrameWidth()-40)/boardSize)-1)+1));
 			}
 			else
 			{
