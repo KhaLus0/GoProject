@@ -71,9 +71,7 @@ public class ClientGUI
 		socket = new Socket("localhost",58901);
 		in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
-		initButtons();
-		initFrames();
-		listenServer();
+        listenServer();
 	}
 	
 	public void listenServer()
@@ -88,11 +86,15 @@ public class ClientGUI
 				if(response.equals("PLAYER 1"))
 				{
 					chooseSize.setVisible(true);
+					initButtons();
+					initFrames();
 				}
 				if(response.startsWith("PLAYER 2"))
 				{
 					response = response.substring(8);
 					boardSize = Integer.parseInt(response);
+					initButtons();
+					initFrames();
 				}
 				if(response.startsWith("BOARD"))
 				{
@@ -200,18 +202,21 @@ public class ClientGUI
 					stateLabel.setText("You Win!");
 					mainFrame.repaint();
 					mainFrame.revalidate();
+					check = false;
 				}
 				if(response.equals("LOSE"))
 				{
 					stateLabel.setText("You Lose!");
 					mainFrame.repaint();
 					mainFrame.revalidate();
+					check = false;
 				}
 				if(response.equals("TIE"))
 				{
 					stateLabel.setText("It's a Draw!");
 					mainFrame.repaint();
 					mainFrame.revalidate();
+					check = false;
 				}
 				
 			}		
