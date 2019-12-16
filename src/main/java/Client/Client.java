@@ -3,7 +3,7 @@ package Client;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-public class Guitest 
+public class Client 
 {
 	public static void main( String[] args ) throws UnknownHostException, IOException
     {
