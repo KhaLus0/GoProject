@@ -68,6 +68,9 @@ class Game {
             currentPlayer.output.println("PICK");
             currentPlayer.opponent.output.println("PICK");
             passCounter = 0;
+        } else {
+            currentPlayer.output.println("TURN");
+            currentPlayer.opponent.output.println("TURN");
         }
         currentPlayer = currentPlayer.opponent;
     }
