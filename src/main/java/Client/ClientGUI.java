@@ -175,16 +175,22 @@ public class ClientGUI
 				if(response.equals("WIN"))
 				{
 					resultLabel.setText("You Win!");
+					matchResult.repaint();
+					matchResult.revalidate();
 					matchResult.setVisible(true);
 				}
 				if(response.equals("LOSE"))
 				{
 					resultLabel.setText("You Lose!");
+					matchResult.repaint();
+					matchResult.revalidate();
 					matchResult.setVisible(true);
 				}
 				if(response.equals("TIE"))
 				{
 					resultLabel.setText("It's a Draw!");
+					matchResult.repaint();
+					matchResult.revalidate();
 					matchResult.setVisible(true);
 				}
 				
@@ -440,6 +446,10 @@ public class ClientGUI
 		setSize9.setPreferredSize(setPreferredSize);
 		setSize13.setPreferredSize(setPreferredSize);
 		setSize19.setPreferredSize(setPreferredSize);
+		matchResult.setSize(400,160);
+		matchResult.setResizable(false);
+		resultLabel.setPreferredSize(setPreferredSize);
+		matchResult.add(resultLabel);
 		chooseSizePanel.add(setSize9);
 		chooseSizePanel.add(setSize13);
 		chooseSizePanel.add(setSize19);
