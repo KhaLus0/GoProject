@@ -88,7 +88,6 @@ public class ClientGUI
 			if(in.hasNextLine())
 			{
 				String response = in.nextLine();
-				System.out.println(response);
 				if(response.equals("Player 1"))
 				{
 					currentTurn = turn.YOU;
@@ -144,14 +143,21 @@ public class ClientGUI
 							index++;
 						}
 					}
-					for (int i = 0; i < boardSize; i++) {
-						for (int j  = 0; j < boardSize; j++) {
-							System.out.print(boardFields[i][j]);
-						}
-						System.out.println();
-					}
 				updateBoard(boardFields);
-				stateLabel.setText(" Opponent turn!");
+				if(currentTurn == turn.YOU)
+				{
+					currentTurn = turn.OPPONENT;
+					stateLabel.setText(" Opponent turn! ");
+					mainFrame.repaint();
+					mainFrame.revalidate();
+				}
+				else
+				{
+					stateLabel.setText(" Your turn! ");
+					currentTurn = turn.YOU;
+					mainFrame.repaint();
+					mainFrame.revalidate();
+				}
 				}
 				if(response.equals("PICK"))
 				{
@@ -175,26 +181,20 @@ public class ClientGUI
 					choosenOutlines.clear();
 					mainFrame.repaint();
 					mainFrame.revalidate();
-					System.out.println(response.length());
 					for(int i = 0;i<response.length();i++)
 					{
 						String tempColor="";
-						System.out.println(response.charAt(i));
 						if(response.charAt(i)=='g')
 						{
 							tempColor = "Green";
-							System.out.println("GREEN");
 						}
 						if(response.charAt(i)=='r')
 						{
 							tempColor="Red";
-							System.out.println("RED");
 						}
 						if(tempColor!="")
 						{
-							System.out.println("RYS");
 							DrawChooseOutline drawOutline = new DrawChooseOutline(15+i%boardSize*((getFrameWidth()-40)/boardSize)+2,i/boardSize*((getFrameHeight()-40)/boardSize)+2,26,26,tempColor);
-							System.out.println(i/boardSize + " " + i%boardSize);
 							allOutlines.add(drawOutline);
 							mainFrame.add(drawOutline);
 							mainFrame.repaint();
@@ -220,11 +220,13 @@ public class ClientGUI
 				if(response.equals("REPLAY"))
 				{
 					field="";
-					for(int i=0;i<nodes.size();i++)
+					for(int i=0;i<allOutlines.size();i++)
 					{
-						if(nodes.get(i)!=null)
-						mainFrame.remove(nodes.get(i));
+						if(allOutlines.get(i)!=null)
+						mainFrame.remove(allOutlines.get(i));
 					}
+					mainFrameMenuBar.remove(accept);
+					mainFrameMenuBar.remove(decline);
 					mainFrame.addMouseListener(mouseClick);
 					mainFrame.addMouseMotionListener(mouseMove);
 					mainFrame.removeMouseListener(mouseChooseAlive);
@@ -405,7 +407,6 @@ public class ClientGUI
 					currentGamemodeType = gamemodeType.PVP;
 				if(name==("Player vs Bot"))
 					currentGamemodeType = gamemodeType.PVB;
-				currentTurn = turn.YOU;
 				drawRectangles();
 				mainFrame.repaint();
 				mainFrame.revalidate();
@@ -438,7 +439,6 @@ public class ClientGUI
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(field);
 				mainFrame.removeMouseListener(mouseChooseAlive);
 				out.println("SEND "+field);
 			}
@@ -534,13 +534,7 @@ public class ClientGUI
 		public void mouseClicked(MouseEvent e) {
 			if(currentTurn == turn.YOU)
 			{
-				System.out.println(((e.getX()-15)/((getFrameWidth()-40)/boardSize))+" "+((e.getY()-15)/((getFrameWidth()-40)/boardSize)-1));
 				out.println("MOVE " +(((e.getY()-35)/((getFrameWidth()-40)/boardSize))+1) + " " + ((e.getX()-15)/((getFrameWidth()-40)/boardSize)+1));
-			}
-			else
-			{
-				currentTurn = turn.YOU;
-				stateLabel.setText(" Your Turn!");
 			}
 		}
 		public void mousePressed(MouseEvent e) {}
@@ -606,7 +600,6 @@ public class ClientGUI
 		String temp = field.substring(0,min);
 		field = temp+"g"+field.substring(min+1);
 		String[][] boardFields = new String[boardSize][boardSize];
-		System.out.println("BOOP");
 		for(int i = 0;i<pawns.size();i++)
 		{
 			boardFields[i/boardSize][i%boardSize] = pawnsString.get(i);
