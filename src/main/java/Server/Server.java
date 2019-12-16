@@ -27,11 +27,12 @@ public class Server {
 
 class Game {
     GoGame game;
+    int size;
     Player currentPlayer;
     int passCounter;
 
     public Game() {
-        game = new GoGame(9);
+       // game = new GoGame(9);
         passCounter = 0;
     }
 
@@ -162,8 +163,10 @@ class Game {
             input = new Scanner(socket.getInputStream());
             output = new PrintWriter(socket.getOutputStream(), true);
             if (stone == 'B') {
+                this.output.println("Player 1");
                 currentPlayer = this;
             } else {
+                this.output.println("Player 2 " + size);
                 opponent = currentPlayer;
                 opponent.opponent = this;
             }
@@ -204,6 +207,10 @@ class Game {
                                 this.opponent.output.println("REPLAY");
                             }
                         }
+                    } else if (command.startsWith("SIZE")) {
+                        String[] temp = command.split(" ");
+                        size = Integer.parseInt(temp[1]);
+                        game = new GoGame(size);
                     }
                 }
             }
