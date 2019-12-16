@@ -72,6 +72,7 @@ class Game {
             currentPlayer.output.println("TURN");
             currentPlayer.opponent.output.println("TURN");
         }
+        game.changePlayer();
         currentPlayer = currentPlayer.opponent;
     }
 
@@ -207,7 +208,9 @@ class Game {
                                 this.agreed = false;
                                 this.opponent.agreed = false;
                                 this.output.println("REPLAY");
+                                this.output.println("TURN");
                                 this.opponent.output.println("REPLAY");
+                                this.opponent.output.println("TURN");
                             }
                         }
                     } else if (command.startsWith("SIZE")) {
