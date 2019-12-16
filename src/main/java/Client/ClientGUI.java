@@ -35,8 +35,6 @@ public class ClientGUI
 	static JButton reset = new JButton("Reset");
 	static JButton accept = new JButton("Agree");
 	static JButton decline = new JButton("Refuse");
-	static JDialog matchResult = new JDialog(mainFrame,"Match result");
-	static JLabel resultLabel = new JLabel();
 
 	static int boardSize;
 	static gamemodeType currentGamemodeType;
@@ -87,6 +85,15 @@ public class ClientGUI
 			{
 				String response = in.nextLine();
 				System.out.println(response);
+				if(response.equals("PLAYER 1"))
+				{
+					chooseSize.setVisible(true);
+				}
+				if(response.startsWith("PLAYER 2"))
+				{
+					response = response.substring(8);
+					boardSize = Integer.parseInt(response);
+				}
 				if(response.startsWith("BOARD"))
 				{
 					response=response.substring(6);
@@ -116,6 +123,8 @@ public class ClientGUI
 				}
 				if(response.startsWith("TERR"))
 				{
+					mainFrameMenuBar.remove(send);
+					mainFrameMenuBar.remove(reset);
 					mainFrameMenuBar.add(accept);
 					mainFrameMenuBar.add(decline);
 					mainFrame.repaint();
@@ -172,26 +181,37 @@ public class ClientGUI
 					mainFrame.repaint();
 					mainFrame.revalidate();
 				}
+				if(response.equals("REPLAY"))
+				{
+					field="";
+					for(int i=0;i<nodes.size();i++)
+					{
+						if(nodes.get(i)!=null)
+						mainFrame.remove(nodes.get(i));
+					}
+					mainFrame.addMouseListener(mouseClick);
+					mainFrame.addMouseMotionListener(mouseMove);
+					mainFrame.removeMouseListener(mouseChooseAlive);
+					mainFrame.repaint();
+					mainFrame.revalidate();
+				}
 				if(response.equals("WIN"))
 				{
-					resultLabel.setText("You Win!");
-					matchResult.repaint();
-					matchResult.revalidate();
-					matchResult.setVisible(true);
+					stateLabel.setText("You Win!");
+					mainFrame.repaint();
+					mainFrame.revalidate();
 				}
 				if(response.equals("LOSE"))
 				{
-					resultLabel.setText("You Lose!");
-					matchResult.repaint();
-					matchResult.revalidate();
-					matchResult.setVisible(true);
+					stateLabel.setText("You Lose!");
+					mainFrame.repaint();
+					mainFrame.revalidate();
 				}
 				if(response.equals("TIE"))
 				{
-					resultLabel.setText("It's a Draw!");
-					matchResult.repaint();
-					matchResult.revalidate();
-					matchResult.setVisible(true);
+					stateLabel.setText("It's a Draw!");
+					mainFrame.repaint();
+					mainFrame.revalidate();
 				}
 				
 			}		
@@ -380,6 +400,7 @@ public class ClientGUI
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(field);
+				mainFrame.removeMouseListener(mouseChooseAlive);
 				out.println("SEND "+field);
 			}
 			
@@ -387,7 +408,6 @@ public class ClientGUI
 		
 		ActionListener doReset = new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for(int i=0;i<choosenOutlines.size();i++)
@@ -446,10 +466,6 @@ public class ClientGUI
 		setSize9.setPreferredSize(setPreferredSize);
 		setSize13.setPreferredSize(setPreferredSize);
 		setSize19.setPreferredSize(setPreferredSize);
-		matchResult.setSize(400,160);
-		matchResult.setResizable(false);
-		resultLabel.setPreferredSize(setPreferredSize);
-		matchResult.add(resultLabel);
 		chooseSizePanel.add(setSize9);
 		chooseSizePanel.add(setSize13);
 		chooseSizePanel.add(setSize19);
@@ -472,7 +488,6 @@ public class ClientGUI
 		mainFrameMenu.setVisible(true);
 		mainFrameMenu.setVisible(true);
 		mainFrame.setVisible(true);
-		chooseSize.setVisible(true);
 	}
 	
 	MouseListener mouseClick = new MouseListener() {
