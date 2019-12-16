@@ -71,6 +71,12 @@ public class ClientGUI
 		socket = new Socket("localhost",58901);
 		in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
+        mainFrame.setSize(frameWidth, frameHeight );
+		mainFrame.setJMenuBar(mainFrameMenuBar);
+		mainFrame.setLocation(380,0);
+		mainFrame.setResizable(false);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setVisible(true);
         listenServer();
 	}
 	
@@ -83,18 +89,47 @@ public class ClientGUI
 			{
 				String response = in.nextLine();
 				System.out.println(response);
-				if(response.equals("PLAYER 1"))
+				if(response.equals("Player 1"))
 				{
+					currentTurn = turn.YOU;
 					chooseSize.setVisible(true);
 					initButtons();
 					initFrames();
+					stateLabel.setText(" Your turn! ");
+					mainFrame.repaint();
+					mainFrame.revalidate();
 				}
-				if(response.startsWith("PLAYER 2"))
+				if(response.startsWith("Player 2"))
 				{
-					response = response.substring(8);
-					boardSize = Integer.parseInt(response);
+					response = response.substring(9);
+					boardSize = Integer.parseInt(response.replaceAll("\\s",""));
+					currentTurn = turn.OPPONENT;
+					drawRectangles();
+					mainFrame.repaint();
+					mainFrame.revalidate();
+					addMouse();
 					initButtons();
 					initFrames();
+					stateLabel.setText(" Opponent turn! ");
+					mainFrame.repaint();
+					mainFrame.revalidate();
+				}
+				if(response.equals("TURN"))
+				{
+					if(currentTurn == turn.YOU)
+					{
+						currentTurn = turn.OPPONENT;
+						stateLabel.setText(" Opponent turn! ");
+						mainFrame.repaint();
+						mainFrame.revalidate();
+					}
+					else
+					{
+						stateLabel.setText(" Your turn! ");
+						currentTurn = turn.YOU;
+						mainFrame.repaint();
+						mainFrame.revalidate();
+					}
 				}
 				if(response.startsWith("BOARD"))
 				{
@@ -116,7 +151,6 @@ public class ClientGUI
 						System.out.println();
 					}
 				updateBoard(boardFields);
-				currentTurn = turn.OPPONENT;
 				stateLabel.setText(" Opponent turn!");
 				}
 				if(response.equals("PICK"))
@@ -482,10 +516,11 @@ public class ClientGUI
 		chooseGamemodeType.setLocation(640,300);
 		chooseGamemodeTypePanel.add(setGamemodeTypePvP);
 		chooseGamemodeTypePanel.add(setGamemodeTypePvB);
-		mainFrame.setSize(frameWidth, frameHeight );
+		
 		mainFrameMenuBar.add(passTurn);
 		mainFrameMenuBar.add(surrender);
 		mainFrameMenuBar.add(stateLabel);
+		mainFrame.setSize(frameWidth, frameHeight );
 		mainFrame.setJMenuBar(mainFrameMenuBar);
 		mainFrame.setLocation(380,0);
 		mainFrame.setResizable(false);
