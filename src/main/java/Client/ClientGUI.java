@@ -595,7 +595,7 @@ public class ClientGUI
 	{
 	public void mouseClicked(MouseEvent e) {
 		clearBoard();
-		drawChooseOutline((e.getX()-15)/((getFrameWidth()-40)/boardSize),(e.getY()-30)/((getFrameWidth()-40)/boardSize),"Green");
+		drawChooseOutline((e.getX()-15)/((getFrameWidth()-40)/boardSize),(e.getY()-35)/((getFrameWidth()-40)/boardSize),"Green");
 		int min=(e.getX()-15)/((getFrameWidth()-40)/boardSize)+(e.getY()-30)/((getFrameWidth()-40)/boardSize)*boardSize;
 		String temp = field.substring(0,min);
 		field = temp+"g"+field.substring(min+1);
