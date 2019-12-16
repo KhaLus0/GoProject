@@ -5,8 +5,8 @@ public class GoGame {
     public GoBoard board;
     private Player currentPlayer;
 
-    public GoGame() {
-        board = new GoBoard(9);
+    public GoGame(int size) {
+        board = new GoBoard(size);
         currentPlayer = Player.BLACK;
     }
 

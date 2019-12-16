@@ -7,28 +7,30 @@ import java.util.HashSet;
 
 public class GoBoard {
     private FieldState[][] board;
+    private int size;
     private Point KoPoint = new Point(0, 0);
     private boolean isKo = false;
 
     public GoBoard(int size) {
+        this.size = size;
         board = new FieldState[size+2][size+2];
         init(board);
     }
 
     private void init(FieldState[][] board) {
-        int size = board[0].length;
+        //int size = board[0].length;
         //set borders to FieldState.BORDER
-        for (int j = 0; j < size; j++) {
+        for (int j = 0; j < size+2; j++) {
             board[0][j] = FieldState.BORDER;
-            board[size-1][j] = FieldState.BORDER;
+            board[size+1][j] = FieldState.BORDER;
         }
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size+2; i++) {
             board[i][0] = FieldState.BORDER;
-            board[i][size-1] = FieldState.BORDER;
+            board[i][size+1] = FieldState.BORDER;
         }
         //set the inside of board to  FieldState.FREE
-        for (int i = 1; i < size - 1; i++) {
-            for (int j = 1; j < size - 1; j++) {
+        for (int i = 1; i <= size; i++) {
+            for (int j = 1; j <= size; j++) {
                 board[i][j] = FieldState.FREE;
             }
         }
@@ -177,8 +179,8 @@ public class GoBoard {
     }
 
     public void printBoard() {
-        for (int i = 0; i < 11; i++) {
-            for (int j = 0; j < 11; j++) {
+        for (int i = 0; i < size + 2; i++) {
+            for (int j = 0; j < size + 2; j++) {
                 if (board[i][j].equals(FieldState.BORDER))
                     System.out.print("# ");
                 else if (board[i][j].equals(FieldState.FREE))
@@ -195,8 +197,8 @@ public class GoBoard {
 
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for (int i = 1; i < 10; i++) {
-            for (int j = 1; j < 10; j++) {
+        for (int i = 1; i <= size; i++) {
+            for (int j = 1; j <= size; j++) {
                 if (board[i][j].equals(FieldState.FREE))
                     result.append("f");
                 else if (board[i][j].equals(FieldState.WHITE))
@@ -214,8 +216,8 @@ public class GoBoard {
         FieldState opp = stone == 'B' ? FieldState.WHITE : FieldState.BLACK;
         for (int i = 0; i < territory.length(); i++) {
             if (territory.charAt(i) == 'g') {
-                int x = (i / 9) + 1;
-                int y = (i % 9) + 1;
+                int x = (i / size) + 1;
+                int y = (i % size) + 1;
                 if (board[x][y].equals(FieldState.FREE))
                     territoryPoints++;
                 else if (board[x][y].equals(opp)) {

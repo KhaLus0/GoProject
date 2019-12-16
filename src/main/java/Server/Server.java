@@ -31,7 +31,7 @@ class Game {
     int passCounter;
 
     public Game() {
-        game = new GoGame();
+        game = new GoGame(9);
         passCounter = 0;
     }
 

@@ -17,7 +17,7 @@ public class GoBoardTest {
 
     @Test
     public void libertiesTest() {
-        GoGame game = new GoGame();
+        GoGame game = new GoGame(9);
         game.board.getBoard()[4][5] = FieldState.WHITE;
         game.board.getBoard()[5][4] = FieldState.WHITE;
         game.board.getBoard()[6][5] = FieldState.WHITE;
@@ -38,7 +38,7 @@ public class GoBoardTest {
 
     @Test
     public void getChainOfStonesTest() {
-        GoGame game = new GoGame();
+        GoGame game = new GoGame(9);
         game.board.getBoard()[2][1] = FieldState.WHITE;
         game.board.getBoard()[2][2] = FieldState.WHITE;
         game.board.getBoard()[2][3] = FieldState.WHITE;
@@ -64,7 +64,7 @@ public class GoBoardTest {
 
     @Test
     public void isPartOfAliveChainTest() {
-        GoGame game = new GoGame();
+        GoGame game = new GoGame(9);
         game.board.getBoard()[1][1] = FieldState.WHITE;
         game.board.getBoard()[2][1] = FieldState.WHITE;
         game.board.getBoard()[3][1] = FieldState.WHITE;
@@ -84,7 +84,7 @@ public class GoBoardTest {
 
     @Test
     public void isChainAliveTest() {
-        GoGame game = new GoGame();
+        GoGame game = new GoGame(9);
         HashSet<Point> stones = new HashSet<Point>();
         game.board.getBoard()[1][1] = FieldState.WHITE;
         game.board.getBoard()[1][2] = FieldState.WHITE;
@@ -108,7 +108,7 @@ public class GoBoardTest {
 
     @Test
     public void removeChainOfStonesTest() {
-        GoGame game = new GoGame();
+        GoGame game = new GoGame(9);
         game.board.getBoard()[1][3] = FieldState.BLACK;
         game.board.getBoard()[1][4] = FieldState.BLACK;
         game.board.getBoard()[2][2] = FieldState.BLACK;
@@ -135,7 +135,7 @@ public class GoBoardTest {
 
     @Test
     public void suicideMoveTest() {
-        GoGame game = new GoGame();
+        GoGame game = new GoGame(9);
         game.board.getBoard()[1][2] = FieldState.WHITE;
         game.board.getBoard()[2][1] = FieldState.WHITE;
         game.board.getBoard()[2][3] = FieldState.WHITE;
@@ -148,7 +148,7 @@ public class GoBoardTest {
 
     @Test
     public void changePlayerTest() {
-        GoGame game = new GoGame();
+        GoGame game = new GoGame(9);
         assertEquals(game.getCurrentPlayer(), Player.BLACK);
         game.placeStone(5,5);
         assertEquals(game.getCurrentPlayer(), Player.WHITE);
@@ -159,7 +159,7 @@ public class GoBoardTest {
 
     @Test
     public void toStringTest() {
-        GoGame game = new GoGame();
+        GoGame game = new GoGame(9);
         game.board.getBoard()[1][1] = FieldState.WHITE;
         game.board.getBoard()[1][2] = FieldState.WHITE;
         game.board.getBoard()[1][7] = FieldState.WHITE;
@@ -188,7 +188,7 @@ public class GoBoardTest {
 
     @Test
     public void KoRuleTest() {
-        GoGame game = new GoGame();
+        GoGame game = new GoGame(9);
         game.board.getBoard()[2][3] = FieldState.BLACK;
         game.board.getBoard()[3][2] = FieldState.BLACK;
         game.board.getBoard()[4][3] = FieldState.BLACK;
