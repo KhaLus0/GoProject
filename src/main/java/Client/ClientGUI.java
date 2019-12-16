@@ -148,7 +148,7 @@ public class ClientGUI
 						if(tempColor!="")
 						{
 							System.out.println("RYS");
-							DrawChooseOutline drawOutline = new DrawChooseOutline(15+i/boardSize*((getFrameWidth()-40)/boardSize),i%boardSize*((getFrameHeight()-40)/boardSize),30,30,tempColor);
+							DrawChooseOutline drawOutline = new DrawChooseOutline(15+i%boardSize*((getFrameWidth()-40)/boardSize)+2,i/boardSize*((getFrameHeight()-40)/boardSize)+2,26,26,tempColor);
 							System.out.println(i/boardSize + " " + i%boardSize);
 							allOutlines.add(drawOutline);
 							mainFrame.add(drawOutline);
@@ -175,17 +175,17 @@ public class ClientGUI
 				if(response.equals("WIN"))
 				{
 					resultLabel.setText("You Win!");
-					resultLabel.setVisible(true);
+					matchResult.setVisible(true);
 				}
 				if(response.equals("LOSE"))
 				{
 					resultLabel.setText("You Lose!");
-					resultLabel.setVisible(true);
+					matchResult.setVisible(true);
 				}
 				if(response.equals("TIE"))
 				{
 					resultLabel.setText("It's a Draw!");
-					resultLabel.setVisible(true);
+					matchResult.setVisible(true);
 				}
 				
 			}		
@@ -505,7 +505,7 @@ public class ClientGUI
 	
 	public void drawChooseOutline(int x,int y,String ccolor)
 	{
-		DrawChooseOutline drawOutline = new DrawChooseOutline(15+x*((getFrameWidth()-40)/boardSize),y*((getFrameHeight()-40)/boardSize),30,30,ccolor);
+		DrawChooseOutline drawOutline = new DrawChooseOutline(15+x*((getFrameWidth()-40)/boardSize)+2,y*((getFrameHeight()-40)/boardSize)+2,26,26,ccolor);
 		mainFrame.add(drawOutline);
 		choosenOutlines.add(drawOutline);
 		Point point = new Point(x+1,y+1);
